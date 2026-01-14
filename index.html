@@ -248,6 +248,9 @@
     }
 
     function resetTimer() {
+      if (!confirm('タイマーをリセットしてもよろしいですか？')) {
+        return;
+      }
       stopTimer();
       totalSeconds = Math.floor(parseFloat(minutesSelect.value) * 60);
       remainingSeconds = totalSeconds;
