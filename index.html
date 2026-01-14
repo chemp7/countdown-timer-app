@@ -226,7 +226,7 @@
       if (isRunning) return;
       
       if (remainingSeconds === 0 || remainingSeconds === totalSeconds) {
-        totalSeconds = parseInt(minutesSelect.value) * 60;
+        totalSeconds = Math.floor(parseFloat(minutesSelect.value) * 60);
         remainingSeconds = totalSeconds;
       }
       
@@ -249,7 +249,7 @@
 
     function resetTimer() {
       stopTimer();
-      totalSeconds = parseInt(minutesSelect.value) * 60;
+      totalSeconds = Math.floor(parseFloat(minutesSelect.value) * 60);
       remainingSeconds = totalSeconds;
       updateDisplay();
     }
@@ -260,14 +260,14 @@
     
     minutesSelect.addEventListener('change', () => {
       if (!isRunning) {
-        totalSeconds = parseInt(minutesSelect.value) * 60;
+        totalSeconds = Math.floor(parseFloat(minutesSelect.value) * 60);
         remainingSeconds = totalSeconds;
         updateDisplay();
       }
     });
 
     // 初期表示
-    totalSeconds = parseInt(minutesSelect.value) * 60;
+    totalSeconds = Math.floor(parseFloat(minutesSelect.value) * 60);
     remainingSeconds = totalSeconds;
     updateDisplay();
   </script>
