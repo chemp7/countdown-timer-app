@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>カウントダウンタイマー</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Arial', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-color: #000;
+      color: #fff;
+      transition: background-color 0.3s;
+    }
+    body.overtime {
+      background-color: #8b0000;
+    }
+    body.blink {
+      animation: blinkBg 0.5s infinite;
+    }
+    @keyframes blinkBg {
+      0%, 100% { background-color: #8b0000; }
+      50% { background-color: #4a0000; }
+    }
+    .container {
+      text-align: center;
+      padding: 20px;
+    }
+    .message {
+      font-size: 60px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      color: #ff6b6b;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .message.show {
+      opacity: 1;
+    }
+    .display {
+      font-size: 300px;
+      font-weight: bold;
+      margin: 40px 0 20px 0;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.05em;
+    }
+    .progress-container {
+      width: 80%;
+      max-width: 600px;
+      height: 20px;
+      background-color: #333;
+      border-radius: 10px;
+      margin: 0 auto 40px auto;
+      overflow: hidden;
+      opacity: 1;
+      transition: opacity 0.3s;
+    }
+    .progress-container.hidden {
+      opacity: 0;
+    }
+    .progress-bar {
+      height: 100%;
+      background-color: #fff;
+      width: 100%;
+      transition: width 0.3s linear;
+      border-radius: 10px;
+    }
+    .controls {
+      margin: 30px 0;
+    }
+    select {
+      font-size: 24px;
+      padding: 10px 20px;
+      margin: 0 10px;
+      border: 2px solid #fff;
+      background-color: transparent;
+      color: #fff;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    select:focus {
+      outline: none;
+      border-color: #4a9eff;
+    }
+    select option {
+      background-color: #fff;
+      color: #000;
+    }
+    button {
+      font-size: 24px;
+      padding: 15px 40px;
+      margin: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.2s;
+    }
+    .start-btn {
+      background-color: #4CAF50;
+      color: white;
+    }
+    .start-btn:hover {
+      background-color: #45a049;
+    }
+    .start-btn:disabled {
+      background-color: #666;
+      cursor: not-allowed;
+    }
+    .stop-btn {
+      background-color: #f44336;
+      color: white;
+    }
+    .stop-btn:hover {
+      background-color: #da190b;
+    }
+    .reset-btn {
+      background-color: #2196F3;
+      color: white;
+    }
+    .reset-btn:hover {
+      background-color: #0b7dda;
+    }
+    .hurry-btn {
+      background-color: #FF9800;
+      color: white;
+    }
+    .hurry-btn:hover {
+      background-color: #e68900;
+    }
+    label {
+      font-size: 20px;
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="message" id="message">巻きでお願いします</div>
+    <div class="display" id="display">00:00</div>
+    <div class="progress-container" id="progressContainer">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+    <div class="controls">
+      <label for="minutes">時間設定:</label>
+      <select id="minutes">
+        <option value="0.5">30秒</option>
+        <option value="1">1分</option>
+        <option value="1.5">1分30秒</option>
+        <option value="2">2分</option>
+        <option value="2.5">2分30秒</option>
+        <option value="3">3分</option>
+        <option value="3.5">3分30秒</option>
+        <option value="4">4分</option>
+        <option value="4.5">4分30秒</option>
+        <option value="5">5分</option>
+        <option value="5.5">5分30秒</option>
+        <option value="6">6分</option>
+        <option value="6.5">6分30秒</option>
+        <option value="7">7分</option>
+        <option value="7.5">7分30秒</option>
+        <option value="8">8分</option>
+        <option value="8.5">8分30秒</option>
+        <option value="9">9分</option>
+        <option value="9.5">9分30秒</option>
+        <option value="10">10分</option>
+        <option value="10.5">10分30秒</option>
+        <option value="11">11分</option>
+        <option value="11.5">11分30秒</option>
+        <option value="12">12分</option>
+        <option value="12.5">12分30秒</option>
+        <option value="13">13分</option>
+        <option value="13.5">13分30秒</option>
+        <option value="14">14分</option>
+        <option value="14.5">14分30秒</option>
+        <option value="15">15分</option>
+        <option value="15.5">15分30秒</option>
+        <option value="16">16分</option>
+        <option value="16.5">16分30秒</option>
+        <option value="17">17分</option>
+        <option value="17.5">17分30秒</option>
+        <option value="18">18分</option>
+        <option value="18.5">18分30秒</option>
+        <option value="19">19分</option>
+        <option value="19.5">19分30秒</option>
+        <option value="20">20分</option>
+        <option value="20.5">20分30秒</option>
+        <option value="21">21分</option>
+        <option value="21.5">21分30秒</option>
+        <option value="22">22分</option>
+        <option value="22.5">22分30秒</option>
+        <option value="23">23分</option>
+        <option value="23.5">23分30秒</option>
+        <option value="24">24分</option>
+        <option value="24.5">24分30秒</option>
+        <option value="25">25分</option>
+        <option value="45" selected>45分</option>
+      </select>
+    </div>
+    <div>
+      <button class="start-btn" id="startBtn">スタート</button>
+      <button class="stop-btn" id="stopBtn">ストップ</button>
+      <button class="reset-btn" id="resetBtn">リセット</button>
+    </div>
+  </div>
+
+  <script>
+    let remainingSeconds = 0;
+    let totalSeconds = 0;
+    let intervalId = null;
+    let isRunning = false;
+    let isHurryMode = false;
+
+    const display = document.getElementById('display');
+    const message = document.getElementById('message');
+    const progressContainer = document.getElementById('progressContainer');
+    const progressBar = document.getElementById('progressBar');
+    const minutesSelect = document.getElementById('minutes');
+    const startBtn = document.getElementById('startBtn');
+    const stopBtn = document.getElementById('stopBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const hurryBtn = document.getElementById('hurryBtn');
+
+    function formatTime(seconds) {
+      const isNegative = seconds < 0;
+      const absSeconds = Math.abs(seconds);
+      const mins = Math.floor(absSeconds / 60);
+      const secs = absSeconds % 60;
+      const formatted = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+      return isNegative ? '-' + formatted : formatted;
+    }
+
+    function updateDisplay() {
+      display.textContent = formatTime(remainingSeconds);
+      
+      if (remainingSeconds < 0) {
+        document.body.classList.add('overtime');
+        progressContainer.classList.add('hidden');
+      } else {
+        document.body.classList.remove('overtime');
+        progressContainer.classList.remove('hidden');
+        const percentage = (remainingSeconds / totalSeconds) * 100;
+        progressBar.style.width = percentage + '%';
+      }
+    }
+
+    function startTimer() {
+      if (isRunning) return;
+      
+      if (remainingSeconds === 0 || remainingSeconds === totalSeconds) {
+        totalSeconds = Math.floor(parseFloat(minutesSelect.value) * 60);
+        remainingSeconds = totalSeconds;
+      }
+      
+      isRunning = true;
+      startBtn.disabled = true;
+      
+      intervalId = setInterval(() => {
+        remainingSeconds--;
+        updateDisplay();
+      }, 1000);
+    }
+
+    function stopTimer() {
+      if (!isRunning) return;
+      
+      isRunning = false;
+      startBtn.disabled = false;
+      clearInterval(intervalId);
+    }
+
+    function resetTimer() {
+      const confirmed = confirm('タイマーをリセットしてもよろしいですか？');
+      if (!confirmed) {
+        return;
+      }
+      stopTimer();
+      isHurryMode = false;
+      message.classList.remove('show');
+      document.body.classList.remove('blink');
+      totalSeconds = Math.floor(parseFloat(minutesSelect.value) * 60);
+      remainingSeconds = totalSeconds;
+      updateDisplay();
+    }
+
+    function toggleHurryMode() {
+      isHurryMode = !isHurryMode;
+      if (isHurryMode) {
+        message.classList.add('show');
+        document.body.classList.add('blink');
+        hurryBtn.textContent = '解除';
+      } else {
+        message.classList.remove('show');
+        document.body.classList.remove('blink');
+        hurryBtn.textContent = '巻きで';
+      }
+    }
+
+    startBtn.addEventListener('click', startTimer);
+    stopBtn.addEventListener('click', stopTimer);
+    resetBtn.addEventListener('click', resetTimer);
+    hurryBtn.addEventListener('click', toggleHurryMode);
+    
+    minutesSelect.addEventListener('change', () => {
+      if (!isRunning) {
+        totalSeconds = Math.floor(parseFloat(minutesSelect.value) * 60);
+        remainingSeconds = totalSeconds;
+        updateDisplay();
+      }
+    });
+
+    // 初期表示
+    totalSeconds = Math.floor(parseFloat(minutesSelect.value) * 60);
+    remainingSeconds = totalSeconds;
+    updateDisplay();
+  </script>
+</body>
+</html>
