@@ -23,12 +23,51 @@
     body.overtime {
       background-color: #8b0000;
     }
+    body.blink {
+      animation: blinkBg 0.5s infinite;
+    }
+    @keyframes blinkBg {
+      0%, 100% { background-color: #8b0000; }
+      50% { background-color: #4a0000; }
+    }
+    .top-right-links {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      gap: 10px;
+      z-index: 10;
+    }    
+    .top-right-link {
+      font-size: 18px;
+      color: #4a9eff;
+      text-decoration: none;
+      border: 1px solid #4a9eff;
+      padding: 8px 16px;
+      border-radius: 5px;
+      transition: all 0.2s;
+    }        
+    .top-right-link:hover {
+      background-color: #4a9eff;
+      color: #000;
+    }
     .container {
       text-align: center;
       padding: 20px;
     }
+    .message {
+      font-size: 60px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      color: #ff6b6b;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .message.show {
+      opacity: 1;
+    }
     .display {
-      font-size: 300px;
+      font-size: 260px;
       font-weight: bold;
       margin: 40px 0 20px 0;
       font-variant-numeric: tabular-nums;
@@ -111,6 +150,13 @@
     .reset-btn:hover {
       background-color: #0b7dda;
     }
+    .hurry-btn {
+      background-color: #FF9800;
+      color: white;
+    }
+    .hurry-btn:hover {
+      background-color: #e68900;
+    }
     label {
       font-size: 20px;
       margin-right: 10px;
@@ -118,7 +164,13 @@
   </style>
 </head>
 <body>
+  <div class="top-right-links">
+    <a href="app.html" class="top-right-link">v1</a>
+    <a href="v2.html" class="top-right-link">v2</a>
+    <a href="v3.html" class="top-right-link">v3</a>
+  </div>
   <div class="container">
+    <div class="message" id="message">巻きでお願いします</div>
     <div class="display" id="display">00:00</div>
     <div class="progress-container" id="progressContainer">
       <div class="progress-bar" id="progressBar"></div>
@@ -192,6 +244,7 @@
       <button class="start-btn" id="startBtn">スタート</button>
       <button class="stop-btn" id="stopBtn">ストップ</button>
       <button class="reset-btn" id="resetBtn">リセット</button>
+      <button class="hurry-btn" id="hurryBtn">巻きで</button>
     </div>
   </div>
 
@@ -200,14 +253,17 @@
     let totalSeconds = 0;
     let intervalId = null;
     let isRunning = false;
+    let isHurryMode = false;
 
     const display = document.getElementById('display');
+    const message = document.getElementById('message');
     const progressContainer = document.getElementById('progressContainer');
     const progressBar = document.getElementById('progressBar');
     const minutesSelect = document.getElementById('minutes');
     const startBtn = document.getElementById('startBtn');
     const stopBtn = document.getElementById('stopBtn');
     const resetBtn = document.getElementById('resetBtn');
+    const hurryBtn = document.getElementById('hurryBtn');
 
     function formatTime(seconds) {
       const isNegative = seconds < 0;
@@ -258,18 +314,36 @@
     }
 
     function resetTimer() {
-      if (!confirm('タイマーをリセットしてもよろしいですか？')) {
+      const confirmed = confirm('タイマーをリセットしてもよろしいですか？');
+      if (!confirmed) {
         return;
       }
       stopTimer();
+      isHurryMode = false;
+      message.classList.remove('show');
+      document.body.classList.remove('blink');
       totalSeconds = Math.floor(parseFloat(minutesSelect.value) * 60);
       remainingSeconds = totalSeconds;
       updateDisplay();
     }
 
+    function toggleHurryMode() {
+      isHurryMode = !isHurryMode;
+      if (isHurryMode) {
+        message.classList.add('show');
+        document.body.classList.add('blink');
+        hurryBtn.textContent = '解除';
+      } else {
+        message.classList.remove('show');
+        document.body.classList.remove('blink');
+        hurryBtn.textContent = '巻きで';
+      }
+    }
+
     startBtn.addEventListener('click', startTimer);
     stopBtn.addEventListener('click', stopTimer);
     resetBtn.addEventListener('click', resetTimer);
+    hurryBtn.addEventListener('click', toggleHurryMode);
     
     minutesSelect.addEventListener('change', () => {
       if (!isRunning) {
