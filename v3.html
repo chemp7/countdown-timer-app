@@ -282,7 +282,6 @@
     const startBtn = document.getElementById('startBtn');
     const stopBtn = document.getElementById('stopBtn');
     const resetBtn = document.getElementById('resetBtn');
-    const hurryBtn = document.getElementById('hurryBtn');
 
     function formatTime(seconds) {
       const isNegative = seconds < 0;
@@ -346,23 +345,9 @@
       updateDisplay();
     }
 
-    function toggleHurryMode() {
-      isHurryMode = !isHurryMode;
-      if (isHurryMode) {
-        message.classList.add('show');
-        document.body.classList.add('blink');
-        hurryBtn.textContent = '解除';
-      } else {
-        message.classList.remove('show');
-        document.body.classList.remove('blink');
-        hurryBtn.textContent = '巻きで';
-      }
-    }
-
     startBtn.addEventListener('click', startTimer);
     stopBtn.addEventListener('click', stopTimer);
     resetBtn.addEventListener('click', resetTimer);
-    hurryBtn.addEventListener('click', toggleHurryMode);
     
     minutesSelect.addEventListener('change', () => {
       if (!isRunning) {
